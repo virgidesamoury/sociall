@@ -1,0 +1,46 @@
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import org.dbunit.DatabaseUnitException;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.database.QueryDataSet;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+/**
+ *
+ * @author Virginie
+ */
+public class TestDataExtractor {
+
+    public static void main(String[] args) throws ClassNotFoundException, SQLException, DataSetException, FileNotFoundException, IOException, DatabaseUnitException {
+        Class.forName("org.apache.derby.jdbc.ClientDriver");
+        Connection jdbcConnection = DriverManager.getConnection("jdbc:derby://localhost:1527/sociall", "sociall", "sociall");
+        IDatabaseConnection connection = new DatabaseConnection(jdbcConnection);
+        QueryDataSet partialDataSet = new QueryDataSet(connection);
+        // Mention all the tables here for which you want data to be extracted
+        // take note of the order to prevent FK constraint violation when re-inserting
+        partialDataSet.addTable("ROLE_");
+        partialDataSet.addTable("COUNTRY");
+        partialDataSet.addTable("CITY");
+        partialDataSet.addTable("ADDRESS");
+        partialDataSet.addTable("PASSWORD");
+        partialDataSet.addTable("USER_");
+        partialDataSet.addTable("ARTIFACT");
+        partialDataSet.addTable("INGREDIENT");
+        // XML file into which data needs to be extracted
+        FlatXmlDataSet.write(partialDataSet, new FileOutputStream("src/test/resources/data/dataset.xml"));
+        System.out.println("Dataset written");
+    }
+
+}

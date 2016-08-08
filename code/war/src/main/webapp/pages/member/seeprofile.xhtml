@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components">
+
+    <f:metadata>
+        <f:viewParam name="userId" value="#{profileController.userId}"/>
+        <f:event type="preRenderView" listener="#{profileController.findProfileValues}" />
+    </f:metadata>
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <h:panelGroup layout="block">
+
+                    <p:layout>
+                        <p:layoutUnit position="west" size="350"
+                                      header="#{msg['common.infos']}">
+                            <sc:profilePic user="#{profileController.user}" 
+                                           width="300"/>
+
+                            <p:panelGrid columns="2" id="memberDetail">
+
+                                <h:outputLabel value="#{msg['common.firstname']}"/>
+                                <h:outputText value="#{profileController.user.firstName}"/>
+
+                                <h:outputLabel value="#{msg['common.lastname']}"/>
+                                <h:outputText value="#{profileController.user.lastName}"/>
+
+                                <h:outputLabel value="#{msg['common.city']}"/>
+                                <h:outputText value="#{profileController.user.address.city}"/>
+
+                            </p:panelGrid>
+
+                            <h:form id="inviteForm">
+                                <p:commandButton type="button" 
+                                                 rendered="#{profileController.showInviteButton()}"
+                                                 value="#{msg['contact.add']}"
+                                                 onclick="inviteDial.show()" />
+                                <p:messages/>
+                            </h:form>
+                        </p:layoutUnit>
+
+                        <p:layoutUnit position="east" size="300"
+                                      header="#{msg['common.agenda']}">
+                            <p:schedule value="#{profileController.eventModel}"/>
+                        </p:layoutUnit>
+
+                        <p:layoutUnit position="center"
+                                      header="#{msg['common.reviews']}">
+                            <h:form>
+                                <sc:reviews type="user" user="#{profileController.user}"/>
+                            </h:form>
+                        </p:layoutUnit>
+                    </p:layout>
+
+                    <p:confirmDialog message="#{msg['contact.add.message']}"
+                                     header="#{msg['common.ask']}" 
+                                     severity="alert"
+                                     widgetVar="inviteDial">
+                        <h:form>
+                            <p:commandButton value="#{msg['common.yes']}" 
+                                             actionListener="#{profileController.addContact()}"
+                                             update=":inviteForm"
+                                             oncomplete="inviteDial.hide();"/>
+                            <p:commandButton value="#{msg['common.no']}" 
+                                             onclick="inviteDial.hide();" 
+                                             type="button" />
+                        </h:form>
+                    </p:confirmDialog>
+                    <p:growl autoUpdate="true"/>
+                </h:panelGroup>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

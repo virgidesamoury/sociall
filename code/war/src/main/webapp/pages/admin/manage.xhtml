@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <ui:include src="/WEB-INF/includes/profilemenu.xhtml">
+                    <ui:param name="activeIndex" value="#{appManager.getMenuIndex('profile.menu.manage')}"/>
+                </ui:include>
+
+                <h2>#{msg['admin.title']}</h2>
+
+                <h:form>
+                    <p:dataTable value="#{settingsController.settings}"
+                                 var="setting"
+                                 sortBy="key"
+                                 editable="true"
+                                 >
+                        <p:column headerText="#{msg['setting.key']}"
+                                  sortBy="key"
+                                  filterBy="key">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{setting.key}" />
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{setting.key}"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="#{msg['setting.textvalue']}">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{setting.textValue}" />
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{setting.textValue}"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="#{msg['setting.numericvalue']}">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{setting.numericValue}" />
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{setting.numericValue}"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column headerText="#{msg['setting.description']}">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{setting.description}" />
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputTextarea value="#{setting.description}"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+
+                        <p:column>
+                            <p:rowEditor />
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

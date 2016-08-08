@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <ui:include src="/WEB-INF/includes/profilemenu.xhtml">
+                    <ui:param name="activeIndex" 
+                              value="#{appManager.getMenuIndex('profile.menu.create')}"/>
+                </ui:include>
+
+                <p:panel header="#{msg['posts.create']}">
+                    <h:form>
+                        <p:selectOneMenu id="category" value="#{postController.category}">  
+                            <f:selectItems 
+                                var="c"
+                                itemLabel="#{msg[c.bundleKey]}"
+                                value="#{categories.categories}" />  
+                            <p:ajax listener="#{postController.categoryValueChange()}"
+                                    process="@this"
+                                    update="@form"/>
+                        </p:selectOneMenu>
+
+                        <p:inputText value="#{postController.title}"
+                                     style="width: 250px"
+                                     pt:placeholder="#{msg['posts.title']}"/>
+                        <p:commandButton value="#{msg['posts.continue']}"
+                                         action="#{postController.checkForDuplicates()}"
+                                         update="@form"/>
+
+                        <p:ajaxStatus style="width:16px;height:16px;display:inline;" 
+                                      id="ajaxStatusPanel">  
+                            <f:facet name="start">  
+                                <p:graphicImage library="images" name="loader.gif" 
+                                                style="width: 30px;display: inline;"/>  
+                            </f:facet>  
+
+                            <f:facet name="complete">  
+                                <h:outputText value="" />  
+                            </f:facet>  
+                        </p:ajaxStatus>
+
+                        <h:panelGroup layout="block" 
+                                      rendered="#{postController.artifacts != null and postController.artifacts.size() > 0}">
+                            <h:outputText value="#{msg['posts.found']}"/>
+                            <p:dataList value="#{postController.artifacts}"
+                                        var="art">
+                                <h:panelGroup layout="block">
+                                    <h:panelGroup layout="block" styleClass="inlineblock image">
+                                        <sc:artPic artifact="#{art}"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" styleClass="inlineblock info">
+                                        <h4><h:outputText value="#{art.title}"/></h4>
+                                        <sc:averageRating artifact="#{art}"/>
+<!--                                        <p:rating value="#{ratingController.calculateAverageRating(art)}"
+                                                  readonly="true"/>-->
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                                <p:separator/>
+                            </p:dataList>
+                            <h:commandLink value="#{msg['posts.new']}" 
+                                           action="#{navigationController.create(postController.artifact)}"/>
+                        </h:panelGroup>
+                    </h:form>
+                </p:panel>
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

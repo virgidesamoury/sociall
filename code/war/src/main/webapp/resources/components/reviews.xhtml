@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="type" type="java.lang.String"
+                      shortDescription="Sets how the reviews will be displayed: by user or by artifact."
+                      default="artifact"/>
+        <cc:attribute name="artifact" type="be.isl.desamouryv.sociall.domain.Artifact"
+                      shortDescription="The artifact whose reviews must be displayed."/>
+        <cc:attribute name="user" type="be.isl.desamouryv.sociall.domain.User"
+                      shortDescription="The user whose reviews must be displayed."/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p:dataList value="#{cc.attrs.type == 'user' ? cc.attrs.user.reviews : cc.attrs.artifact.reviews}"
+                    itemType="none"
+                    var="review"
+                    emptyMessage="#{msg['review.nodata']}">
+            <h:form>
+
+                <h:panelGroup layout="block" styleClass="inlineblock image"
+                              rendered="#{cc.attrs.type == 'artifact'}">
+                    <sc:profilePic user="#{review.user}"/>
+                    <h:outputText value="#{review.user.firstName} #{review.user.lastName}"/>
+                </h:panelGroup>
+                <h:panelGroup layout="block" styleClass="inlineblock info"
+                              rendered="#{cc.attrs.type == 'user'}">
+                    <sc:artPic artifact="#{review.artifact}"/>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" styleClass="inlineblock reviewinfo">
+                    <h:panelGroup rendered="#{cc.attrs.type == 'user'}">
+                        <h3><h:link outcome="#{navigationController.detail(review.artifact)}"
+                                    value="#{review.artifact.title}"/></h3>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h3><h:outputText value="#{review.title}"/></h3>
+                    </h:panelGroup>
+                    <p:rating  readonly="true"
+                               value="#{ratingController.roundRating(review.rating)}"/>
+                    <h:outputText value="#{review.text}" escape="false"/>
+                </h:panelGroup>
+            </h:form>
+            <p:separator/>
+        </p:dataList>
+    </cc:implementation>
+</html>

@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <ui:include src="/WEB-INF/includes/profilemenu.xhtml">
+                    <ui:param name="activeIndex" value="#{appManager.getMenuIndex('profile.menu.agenda')}"/>
+                </ui:include>
+                <p:layout>
+
+                    <p:layoutUnit position="center">
+                        <h:form id="calendar">
+                            <p:schedule value="#{agendaController.eventModel}"
+                                        style="height: 500px;">
+                                <p:ajax event="dateSelect"
+                                        />
+                                <p:ajax event="eventSelect"
+                                        oncomplete="eventDialog.show()"
+                                        update=":eventDialogForm"
+                                        listener="#{agendaController.onEventSelect}" />
+                            </p:schedule>							
+                        </h:form>
+                    </p:layoutUnit>
+
+                    <p:layoutUnit position="east" 
+                                  resizable="false"
+                                  size="500" 
+                                  minSize="400" 
+                                  maxSize="800">
+
+                        <p:layout>
+
+                            <p:layoutUnit position="north"
+                                          header="#{msg['agenda.add']}"
+                                          collapsible="true"
+                                          styleClass="detailPanel">
+                                <h:form id="addEventForm">
+                                    <p:outputLabel for="title"
+                                                   value="#{msg['agenda.event.title']}"/>
+
+                                    <br/>
+                                    <p:autoComplete id="title" 
+                                                    completeMethod="#{agendaController.searchArtifacts}"
+                                                    value="#{agendaController.newEvent.artifact}"
+                                                    var="art"
+                                                    itemValue="#{art}"
+                                                    itemLabel="#{art.title}"
+                                                    converter="artifactConverter"
+                                                    forceSelection="true">
+                                        <p:ajax event="itemSelect" update="@form" />
+                                        <p:column>
+                                            <sc:artPic artifact="#{art}"
+                                                       width="50"/>
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{art.title}"/>
+                                            <br/>
+                                            <sc:averageRating artifact="#{art}"/>
+                                            <!--                                            <p:rating readonly="true" 
+                                                                                                  value="#{ratingController.calculateAverageRating(art)}"/>-->
+                                        </p:column>
+                                    </p:autoComplete>
+
+                                    <br/>
+                                    <p:outputLabel for="start" value="#{msg['agenda.event.start']}"/>
+                                    <p:calendar id="start" 
+                                                value="#{agendaController.newEvent.startDate}"
+                                                pattern="dd/MM/yyyy hh:mm"/>
+
+                                    <br/>
+                                    <p:outputLabel for="end" value="#{msg['agenda.event.end']}"/>
+                                    <p:calendar id="end" 
+                                                value="#{agendaController.newEvent.endDate}"
+                                                pattern="dd/MM/yyyy hh:mm"/>
+
+                                    <br/>
+                                    <p:outputLabel for="note" value="#{msg['agenda.event.note']}"/>
+
+                                    <br/>
+                                    <p:inputTextarea id="note" value="#{agendaController.newEvent.note}"/>
+
+                                    <p:commandButton action="#{agendaController.saveEvent}"
+                                                     icon="ui-icon-disk"
+                                                     value="#{msg['agenda.event.save']}"
+                                                     process="@form"
+                                                     update="@form :calendar"
+                                                     /> 
+                                    <p:growl/>
+                                </h:form>
+                            </p:layoutUnit>
+
+                            <p:layoutUnit position="center"
+                                          header="#{msg['agenda.search']}"
+                                          styleClass="detailPanel">
+                                <h:form>
+                                    <h:inputText value="#{query}"/>
+                                    <p:commandButton 
+                                        icon="ui-icon-search"
+                                        action="#{agendaController.findInAgenda(query)}"
+                                        process="@form" update="@form"/>   
+                                    <p:dataList value="#{agendaController.agendaEventsContaining}"
+                                                itemType="none"
+                                                var="ev">
+                                        <h:panelGroup layout="block"
+                                                      styleClass="inlineblock eventImage">
+                                            <sc:artPic artifact="#{ev.artifact}"
+                                                       width="80"/>
+                                        </h:panelGroup>
+
+                                        <h:panelGroup layout="block" styleClass="inlineblock eventInfo">
+                                            <h:outputText value="#{ev.artifact.title}"/>
+                                            <br/>
+                                            <sc:averageRating artifact="#{ev.artifact}"/>
+                                            <!--                                            <p:rating readonly="true" 
+                                                                                                  value="#{ratingController.calculateAverageRating(ev.artifact)}"/>-->
+                                            <br/>
+                                            <h:outputText value="#{msg['agenda.event.start']}:"/>
+                                            <h:outputText value="#{ev.startDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+                                            </h:outputText>
+                                            <br/>
+                                            <h:outputText value="#{msg['agenda.event.end']}:"/>
+                                            <h:outputText value="#{ev.endDate}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+                                            </h:outputText> 
+                                            <br/>
+                                            <h:outputText value="#{msg['agenda.event.note']}:"/>
+                                            <h:outputText value="#{ev.note}"/>
+                                        </h:panelGroup>
+
+                                        <p:separator/>
+                                    </p:dataList>
+                                </h:form>
+                            </p:layoutUnit>
+
+
+                        </p:layout>
+
+                    </p:layoutUnit>
+
+                </p:layout>
+
+                <p:dialog widgetVar="eventDialog"
+                          dynamic="true"
+                          id="eventDetails"
+                          width="500">
+                    <h:form id="eventDialogForm">
+                        <h:panelGroup layout="block"										
+                                      styleClass="inlineblock eventImage">
+                            <sc:artPic artifact="#{agendaController.selectEvent.data.artifact}"
+                                       width="80"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup layout="block" styleClass="inlineblock eventInfo">
+                            <h:outputText value="#{agendaController.selectEvent.data.artifact.title}"/>
+                            <br/>
+                            <sc:averageRating artifact="#{agendaController.selectEvent.data.artifact}"/>
+                            <!--<p:rating readonly="true" 
+                                value="#{ratingController.calculateAverageRating(agendaController.selectEvent.data.artifact)}"/>-->
+                            <br/>
+                            <h:outputText value="#{msg['agenda.event.start']}:"/>
+                            <h:outputText value="#{agendaController.selectEvent.startDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+                            </h:outputText>
+                            <br/>
+                            <h:outputText value="#{msg['agenda.event.end']}:"/>
+                            <h:outputText value="#{agendaController.selectEvent.endDate}">
+                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm"/>
+                            </h:outputText> 
+                            <br/>
+                            <h:outputText value="#{msg['agenda.event.note']}:"/>
+                            <h:outputText value="#{agendaController.selectEvent.data.note}"/>
+                        </h:panelGroup>
+                    </h:form>
+                </p:dialog>	
+
+            </ui:define>
+
+            <ui:define name="bottom">
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

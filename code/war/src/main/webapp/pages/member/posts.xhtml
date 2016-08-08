@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <ui:include src="/WEB-INF/includes/profilemenu.xhtml">
+                    <ui:param name="activeIndex" value="#{appManager.getMenuIndex('profile.menu.posts')}"/>
+                </ui:include>
+                <p:panel header="#{msg['posts.myposts']}" toggleable="true">
+                    <h:form>
+
+                        <p:dataList value="#{userSession.user.reviews}"
+                                    var="review"
+                                    itemType="none">
+                            <p:fieldset>
+
+                                <h:panelGroup layout="block"
+                                              styleClass="inlineblock image">
+                                    <sc:artPic artifact="#{review.artifact}"
+                                               width="150"/>
+                                </h:panelGroup>
+                                <h:panelGroup layout="block"
+                                              styleClass="inlineblock info">
+
+                                    <h3><h:outputText value="#{review.artifact.title}"/></h3>
+                                    <h4><h:outputText value="#{review.title}"/></h4>
+                                    <p:panelGrid columns="2">
+                                        <p:outputLabel value="#{msg['posts.rating']}"/>
+                                        <p:rating value="#{ratingController.roundRating(review.rating)}"
+                                                  readonly="true"/>
+                                        <p:outputLabel value="#{msg['posts.date']}"/>
+                                        <h:outputText value="#{review.reviewDate}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </h:outputText>
+                                        <p:outputLabel value="#{msg['posts.post']}"/>
+                                        <h:outputText value="#{review.text}"/>
+                                    </p:panelGrid>
+                                </h:panelGroup>
+                                <br/>
+                            </p:fieldset>
+                        </p:dataList>
+                    </h:form>
+
+                </p:panel>
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

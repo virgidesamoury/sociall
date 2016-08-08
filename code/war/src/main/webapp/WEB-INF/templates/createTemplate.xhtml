@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <link rel="shortcut icon" href="#{resource['images/favicon.ico']}" type="image/x-icon" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Foodish</title>
+    </h:head>
+
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{postController.extractFromFlash}" />
+    </f:metadata>
+
+    <h:body>
+        <h:outputStylesheet library="css" name="style.css"/>
+
+        <div id="top">  
+            <ui:include src="/WEB-INF/includes/header.xhtml"/>
+        </div>
+
+        <div id="content">
+            <ui:include src="/WEB-INF/includes/profilemenu.xhtml">
+                <ui:param name="activeIndex" value="1"/>
+            </ui:include>
+
+            <h:form>
+                <p:panel header="#{msg['posts.create']}">
+
+                    <p><p:inputText value="#{postController.title}"
+                                    pt:placeholder="#{msg['posts.title']}"/></p>
+
+                    <ui:insert name="detail">Detail</ui:insert>
+
+                    <p:editor id="editor" value="#{postController.description}" />  
+
+                    <p:fieldset legend="#{msg['recipe.tags']}">
+                        <p:autoComplete completeMethod="#{postController.completeTag}"
+                                        value="#{postController.selectedTags}">
+<!--                                        var="tag"
+                                        itemLabel="#{tag.name}"
+                                        itemValue="#{tag}">-->
+                            <p:ajax event="itemSelect" listener="#{postController.handleSelect}" 
+                                    update="@this tags" />
+                        </p:autoComplete>
+                        <p:dataList id="tags"
+                                    value="#{postController.selectedTags}"
+                                    var="t"
+                                    itemType="none">
+                            <p:commandButton icon="ui-icon-trash" action="#{postController.removeTag(t)}"
+                                             update="tags"/>
+                            <h:outputText value="#{t.name}"/>
+                        </p:dataList>
+                    </p:fieldset>
+
+                    <h:panelGrid columns="2" style="margin-top:10px">  
+                        <p:commandButton id="submitButton" value="Submit" 
+                                         update="@form" 
+                                         icon="ui-icon-disk" 
+                                         action="#{postController.submit}"/>  
+                        <p:commandButton id="clearButton" 
+                                         type="button" 
+                                         value="Clear" 
+                                         onclick="editor.clear()"  
+                                         icon="ui-icon-close" />  
+                    </h:panelGrid>  
+                </p:panel>
+            </h:form>
+        </div>
+
+        <div id="bottom">
+            <ui:insert name="bottom">Bottom</ui:insert>
+        </div>
+
+    </h:body>
+
+</html>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="sociallTestPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <!--        <exclude-unlisted-classes>false</exclude-unlisted-classes>-->
+        <class>be.isl.desamouryv.sociall.domain.User</class>
+        <class>be.isl.desamouryv.sociall.domain.Role</class>
+        <class>be.isl.desamouryv.sociall.domain.Password</class>
+        <class>be.isl.desamouryv.sociall.domain.Image</class>
+        <class>be.isl.desamouryv.sociall.domain.Address</class>
+        <class>be.isl.desamouryv.sociall.domain.City</class>
+        <class>be.isl.desamouryv.sociall.domain.Country</class>
+        <class>be.isl.desamouryv.sociall.domain.Message</class>
+        <class>be.isl.desamouryv.sociall.domain.Artifact</class>
+        <class>be.isl.desamouryv.sociall.domain.Recipe</class>
+        <class>be.isl.desamouryv.sociall.domain.Ingredient</class>
+        <class>be.isl.desamouryv.sociall.domain.Step</class>
+        <class>be.isl.desamouryv.sociall.domain.Event</class>
+        <class>be.isl.desamouryv.sociall.domain.Comment</class>
+        <class>be.isl.desamouryv.sociall.domain.Setting</class>
+        <class>be.isl.desamouryv.sociall.domain.User_</class>
+        <class>be.isl.desamouryv.sociall.domain.Role_</class>
+        <class>be.isl.desamouryv.sociall.domain.Password_</class>
+        <class>be.isl.desamouryv.sociall.domain.Image_</class>
+        <class>be.isl.desamouryv.sociall.domain.Address_</class>
+        <class>be.isl.desamouryv.sociall.domain.City_</class>
+        <class>be.isl.desamouryv.sociall.domain.Country_</class>
+        <class>be.isl.desamouryv.sociall.domain.Message_</class>
+        <class>be.isl.desamouryv.sociall.domain.Artifact_</class>
+        <class>be.isl.desamouryv.sociall.domain.Recipe_</class>
+        <class>be.isl.desamouryv.sociall.domain.Ingredient_</class>
+        <class>be.isl.desamouryv.sociall.domain.Step_</class>
+        <class>be.isl.desamouryv.sociall.domain.Event_</class>
+        <class>be.isl.desamouryv.sociall.domain.Comment_</class>
+        <class>be.isl.desamouryv.sociall.domain.Setting_</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.user" value="sociall"/>
+            <property name="javax.persistence.jdbc.password" value="sociall"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/socialltest"/>
+        </properties>
+<!--        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby:socialltest;create=true"/>
+        </properties>-->
+    </persistence-unit>
+</persistence>

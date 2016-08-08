@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface shortDescription="Displays the detail of a message.">
+        <cc:attribute type="be.isl.desamouryv.sociall.domain.Message"
+                      name="message"
+                      required="true"/>
+        <cc:attribute name="read"
+                      default="true"
+                      shortDescription="If set to false, the message will get the 'unread' css class."/>
+        <cc:attribute name="overview"
+                      default="false"
+                      shortDescription="If set to true, only an overview of the message will be shown (see Format.overview())"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <p class="sender">
+            <h:outputText value="#{cc.attrs.message.sender.firstName}:"/>
+        </p>
+        <p class="#{cc.attrs.read ? 'read' : 'unread' }">
+            <h:outputText value="#{cc.attrs.message.text}" 
+                          escape="false"
+                          rendered="#{not cc.attrs.overview}"/>
+            <h:outputText value="#{format.overview(cc.attrs.message.text)}" 
+                          escape="false"
+                          rendered="#{cc.attrs.overview}"/>
+        </p>
+        <p class="sentOn">
+            <h:outputText value="#{cc.attrs.message.sentOn}">
+                <f:convertDateTime pattern="dd/MM/yy hh:mm"/>
+            </h:outputText>                                
+        </p>
+    </cc:implementation>
+</html>

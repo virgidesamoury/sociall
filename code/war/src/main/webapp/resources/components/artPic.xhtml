@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface shortDescription="Displays a picture related to an artifact, or a default one if there ain't one yet.">
+        <cc:attribute type="be.isl.desamouryv.sociall.domain.Artifact"
+                      name="artifact"
+                      required="true"
+                      />
+        <cc:attribute name="width" default="100"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:link outcome="#{navigationController.detail(cc.attrs.artifact)}"
+                target="_blank">
+            <p:graphicImage library="images" name="noimage.jpg" width="#{cc.attrs.width}" 
+                            style="display:block;"
+                            rendered="#{cc.attrs.artifact.images[0] == null}"/>
+            <p:graphicImage value="/images/#{cc.attrs.artifact.images[0].fileName}"
+                            width="#{cc.attrs.width}" style="display:block;"
+                            rendered="#{cc.attrs.artifact.images[0] != null}"/>
+        </h:link>
+    </cc:implementation>
+</html>

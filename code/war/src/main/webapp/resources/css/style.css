@@ -1,0 +1,199 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 25-mars-2014, 17:08:31
+    Author     : Virginie
+*/
+/*.ui-widget, .ui-widget .ui-widget {
+    font-size: 90%;
+}*/
+
+.ui-widget {
+    font-size: 90%;
+}
+.ui-widget .ui-widget {
+    font-size: 100%;
+}
+.ui-growl{
+    top: 125px;
+}
+.clearfix {
+    overflow: auto;
+}
+
+body{
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+#top{
+    padding-top: 20px;
+    height: 100px;
+    background-color: #f39c12;
+    text-align: center;
+    line-height: 40px;
+    vertical-align: middle;
+}
+#content{
+
+}
+#bottom{
+}
+.logo{
+    padding-right: 80px;
+    color: white;
+    font-family: sans-serif;
+    font-weight: bolder;
+    font-size: 25px;
+    text-decoration:none;
+}
+.profileMenu{
+    position: absolute;
+    right: 0px;
+}
+span.profileMenu, image.profileMenu{
+    display: inline-block;
+}
+.flux{
+    height: 500px;
+}
+a.catLink{
+    text-align: center;
+    color: white !important;
+    font: sans-serif bold;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 20px;
+}
+.recipes{
+    background-color: #1abc9c;
+}
+.places{
+    background-color: #f1c40f;
+}
+.products{
+    background-color: #2ecc71;
+}
+.events{
+    background-color: #e74c3c;
+}
+/*Profile*/
+.memberDetail td:first-child{
+    width: 20%;
+}
+.memberDetail{
+    width: 100%;
+}
+/*Search results*/
+.resultImage{
+    display: inline-block; 
+    width: 10%; 
+    vertical-align: top;
+}
+.resultData{
+    display: inline-block; 
+    vertical-align: top;
+    width: 80%; 
+    padding-left: 15px;
+}
+/*Details*/
+.gallery{
+    width: 40%;; 
+}
+.info{
+    padding-left: 5px;
+    width: 58%;
+}
+
+/*Common*/
+.inlineblock{
+    display: inline-block; 
+    vertical-align: top;
+}
+
+.inlineblock table{
+    width: 100%;
+}
+/*Review*/
+.reviewfirstcol{
+    width: 15%;
+}
+.reviewinfo{
+    width: 80%;
+}
+/*Messages*/
+.unread{
+    font-weight: bold;
+}
+
+.twocols{
+    width: 49%;
+}
+
+.sender{
+    font-weight: bold;
+}
+.sentOn{
+    font-size: 0.8em;
+    color: grey;
+}
+
+/*Messages*/
+.loginSocial{
+    display: inline-block;
+    width: 250px;
+    padding: 15px;
+    text-align: center;
+}    
+
+.loginSocial img{
+    box-shadow: 4px 4px 0px #aaa; 
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.loginSocial img:hover {
+    -webkit-transform: rotate(-10deg);
+    -moz-transform: rotate(-10deg);
+    -o-transform: rotate(-10deg);
+    -ms-transform: rotate(-10deg);
+    transform: rotate(-10deg);
+}
+
+.signupClassic label{
+    display: inline-block;
+    width: 220px;
+}
+.signupClassic input{
+    width: 250px;
+}
+
+/*Agenda*/
+.detailPanel input, .detailPanel textarea{
+    width: 95%;
+}
+
+.eventImage{
+    width: 20%;
+}
+.eventInfo{
+    width: 75%;
+}
+
+/*Review*/
+.image{
+    min-width: 100px;
+    width: 15%;
+}
+
+.info label{
+    display: inline-block;
+    width: 120px;
+}

@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{recipeDetailController.artifactId}"
+                     required="#{not facesContext.postback}"
+                     requiredMessage="#{msg['common.error.url']}"
+                     />
+        <f:event type="preRenderView" listener="#{recipeDetailController.preRender()}" />
+    </f:metadata>
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <p:messages/>
+
+                <h2>#{recipeDetailController.artifact.title}</h2>
+
+                <p:panel header="#{msg['recipe.details']}">
+                    <h:panelGroup layout="block" styleClass="inlineblock gallery">
+                        <sc:gallery artifact="#{recipeDetailController.artifact}"/>
+                    </h:panelGroup>
+                    
+                    <h:panelGroup layout="block" styleClass="inlineblock info">
+                        <p:panelGrid columns="2">
+                            <h:outputText value="#{msg['recipe.nbpersons']}"/>
+                            <h:outputText value="#{recipeDetailController.artifact.nbPersons}"/>
+
+                            <h:outputText value="#{msg['recipe.price']}"/>
+                            <sc:price price="#{recipeDetailController.artifact.price}"/>
+
+                            <h:outputText value="#{msg['recipe.rating.avg']}"/>
+                            <h:form>
+                                <sc:averageRating artifact="#{recipeDetailController.artifact}"/>
+                            </h:form>
+
+                            <h:outputText value="#{msg['recipe.ingredients']}"/>
+                            <p:dataList value="#{recipeDetailController.artifact.ingredients}" 
+                                        var="ingredient">
+                                #{ingredient.name}
+                            </p:dataList>
+                        </p:panelGrid>
+                        <p:panel header="#{msg['recipe.recipe']}">
+                            #{recipeDetailController.artifact.description}
+                        </p:panel>
+                    </h:panelGroup>
+                </p:panel>
+                
+                <p:panel header="#{msg['recipe.reviews']}">
+                    <sc:reviews artifact="#{recipeDetailController.artifact}"/>
+                </p:panel>
+
+                <ui:include src="/WEB-INF/includes/reviewform.xhtml">
+                    <ui:param name="artifact"
+                              value="#{recipeDetailController.artifact}"/>
+                </ui:include>
+
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <ui:include src="/WEB-INF/includes/profilemenu.xhtml">
+                    <ui:param name="activeIndex" value="#{appManager.getMenuIndex('profile.menu.messages')}"/>
+                </ui:include>
+                <p:panel header="#{msg['profile.messages.title']}"
+                         styleClass="inlineblock twocols">
+                    <h:form id="listConversation">
+                        <p:dataTable value="#{messageController.conversations}" 
+                                     var="conversation">
+
+                            <p:ajax event="rowSelect" listener="#{messageController.displayDetailConversation(conversation)}"
+                                    process="@this" update="@form :detailConversation"/>
+
+                            <p:column>
+                                <c:set var="other" value="#{messageController.otherUser(conversation)}"/>
+                                <sc:profilePic user="#{other}"/>
+                                <h:outputText value="#{other.firstName} #{other.lastName}"/>
+                            </p:column>
+
+                            <p:column headerText="#{msg['messages.messages']}">
+                                <sc:message message="#{conversation.messages[0]}" 
+                                            overview="true"
+                                            read="#{conversation.messages[0].read or conversation.messages[0].sender == userSession.user}"/>
+                            </p:column>
+                            <p:column>
+                                <p:commandButton action="#{messageController.displayDetailConversation(conversation)}"
+                                                 icon="ui-icon-circle-triangle-e"
+                                                 process="@form"
+                                                 update="@form :detailConversation"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:panel>
+
+                <h:panelGroup layout="block" styleClass="inlineblock twocols">
+                    <h:form>
+                        <p:panel 
+                            header="#{msg['messages.new']}"
+                            toggleable="true"
+                            collapsed="true">
+                            <p:inputText />
+                            <p:editor value="#{messageController.newMessageText}" 
+                                      id="newMessage"
+                                      controls="undo redo"
+                                      height="100"/>
+                        </p:panel>
+                    </h:form>
+                    <h:form id="detailConversation">
+                        <p:panel>
+                            <f:facet name="header">
+                                <h:outputFormat value="#{msg['messages.conversationwith']}"
+                                                rendered="#{messageController.detailConversation != null}">
+                                    <f:param 
+                                        value="#{messageController.otherUser(messageController.detailConversation).firstName}"/>
+                                </h:outputFormat>
+                                <h:outputText value="#{msg['messages.conversation']}"
+                                              rendered="#{messageController.detailConversation == null}"/>
+                            </f:facet>
+
+                            <p:editor value="#{messageController.newMessageText}" 
+                                      id="newMessage"
+                                      controls="undo redo"
+                                      height="100"/>
+                            <br/>
+                            <p:commandButton action="#{messageController.send()}"
+                                             icon="ui-icon-mail-closed"
+                                             value="#{msg['messages.send']}"
+                                             process="@form"
+                                             update="@form :listConversation"/>
+
+                            <p:dataList value="#{messageController.detailConversation.messages}"
+                                        itemType="none" var="message">
+                                <sc:message message="#{message}"/>
+                                <p:separator/>
+                            </p:dataList>
+                        </p:panel>
+                    </h:form>
+                </h:panelGroup>
+
+                <h:form id="form">
+                    <!--<p:socket channel="/conversation/#{userSession.user.id}"-->
+                    <p:socket channel="/conversation"
+                              onMessage="handleMessage"/>
+                        <p:remoteCommand name="pushConvId" 
+                                         actionListener="#{messageController.refreshConversations}" 
+                                         process="@form"
+                                         update=":listConversation :detailConversation"/>
+                </h:form>
+
+                <script>
+                    function handleMessage(data) {
+                        console.log('test');
+                        console.log(data);
+                        pushConvId([{name: 'convId', value: data}]);
+                    }
+                </script>
+
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <f:metadata>
+        <f:viewParam name="criteria" value="#{searchController.criteria}"
+                     required="true"
+                     requiredMessage="#{msg['common.error']}"
+                     />
+        <f:event type="preRenderView" listener="#{searchController.doSearch}" />
+    </f:metadata>
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <h2>#{msg['search.title']}</h2>
+
+                <h:panelGroup layout="block" rendered="#{empty searchController.artifacts}">
+                    <h:form>
+                        <p>
+                            <h:outputText value="#{msg['search.refine']}"/>
+                        </p>
+                        <p>
+                            <p:inputText size="50" value="#{searchController.criteria}"/>
+                            <p:commandButton icon="ui-icon-search"
+                                             action="#{navigationController.list(searchController.criteria)}"/>
+                        </p>
+                    </h:form>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" rendered="#{not empty searchController.artifacts}">
+                    <h:form>
+                        <h:outputFormat value="#{msg['search.numberofresults']}">
+                            <f:param value="#{searchController.criteria}"/>
+                            <f:param value="#{searchController.artifacts.size()}"/>
+                        </h:outputFormat>
+
+                        <p:dataList value="#{searchController.artifacts}"
+                                    var="artifact"
+                                    itemType="none">
+
+                            <h:panelGroup layout="block"
+                                          styleClass="inlineblock image">
+                                <sc:artPic artifact="#{artifact}"
+                                           width="150"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup layout="block" styleClass="inlineblock info">
+                                <h3>
+                                    <h:link value="#{artifact.title}" 
+                                                   outcome="#{navigationController.detail(artifact)}"/>
+                                </h3>
+                                <sc:averageRating artifact="#{artifact}"/>
+                                <h:outputText value="#{artifact.description}"/>
+                            </h:panelGroup>
+
+                            <p:separator/>
+                        </p:dataList>
+                    </h:form>
+                </h:panelGroup>
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

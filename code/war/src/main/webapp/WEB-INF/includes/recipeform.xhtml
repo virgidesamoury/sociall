@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:panelGroup layout="block">
+
+        <p:panel header="#{msg['recipe.create']}">
+
+            <p><p:inputText value="#{postController.title}"
+                            pt:placeholder="#{msg['recipe.title']}"/></p>
+
+            <p:fieldset legend="#{msg['recipe.ingredients']}">
+                <p:dataList id="ingredients"
+                            value="#{postController.selectedIngredients}"
+                            var="i">
+                    <p:inputText value="#{i.name}" style="width: 200px;"/>
+                </p:dataList>
+                <p:commandButton icon="ui-icon-plus" 
+                                 action="#{postController.addIngredient}"
+                                 process="ingredients"
+                                 update="ingredients"/>
+            </p:fieldset>
+
+            <p:editor id="editor" value="#{postController.recipe.description}" />  
+
+            <p:fieldset legend="#{msg['recipe.tags']}">
+                <p:autoComplete completeMethod="#{postController.completeTag}"
+                                value="#{postController.selectedTags}"
+                                var="i"
+                                itemLabel="#{i.name}"
+                                itemValue="#{i}">
+                    <p:ajax event="itemSelect" listener="#{postController.handleSelect}" 
+                            update="@this tags" />
+                </p:autoComplete>
+                <p:dataList id="tags"
+                            value="#{postController.selectedTags}"
+                            var="t"
+                            itemType="none"
+                            >
+                    <p:commandButton icon="ui-icon-trash" action="#{postController.removeTag(t)}"
+                                     update="tags"/>
+                    <h:outputText value="#{t.name}"/>
+                </p:dataList>
+            </p:fieldset>
+
+            <h:panelGrid columns="2" style="margin-top:10px">  
+                <p:commandButton id="submitButton" value="Submit" 
+                                 update="@form" 
+                                 icon="ui-icon-disk" 
+                                 action="#{postController.submit}"/>  
+                <p:commandButton id="clearButton" 
+                                 type="button" 
+                                 value="Clear" 
+                                 onclick="editor.clear()"  
+                                 icon="ui-icon-close" />  
+            </h:panelGrid>  
+
+        </p:panel>
+    </h:panelGroup>
+
+</html>
+

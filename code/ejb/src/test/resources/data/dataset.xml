@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <ROLE_ ID="10" NAME="ADMIN" CREATEDBY="DBUNIT" />
+  <ROLE_ ID="11" NAME="MEMBER" CREATEDBY="DBUNIT" />
+  <COUNTRY ID="10" CODE="BE" NAME="Belgique" CREATEDBY="DBUNIT" />
+  <COUNTRY ID="11" CODE="FR" NAME="France" CREATEDBY="DBUNIT" />
+  <COUNTRY ID="12" CODE="GB" NAME="Royaume-Uni" CREATEDBY="DBUNIT" />
+  <CITY ID="10" NAME="Little Whinging" ZIP="KT220LQ" COUNTRY_ID="12" CREATEDBY="DBUNIT" />
+  <CITY ID="11" NAME="Ottery St Catchpole" ZIP="DT12RY" COUNTRY_ID="12" CREATEDBY="DBUNIT" />
+  <CITY ID="12" NAME="London" ZIP="N1P2AL" COUNTRY_ID="12" CREATEDBY="DBUNIT" />
+  <ADDRESS ID="10" NB="4" STREET="Privet Drive" CITY_ID="12" CREATEDBY="DBUNIT" />
+  <ADDRESS ID="11" STREET="The Burrow" CITY_ID="12" CREATEDBY="DBUNIT" />
+  <ADDRESS ID="12" NB="125" STREET="Pudding Lane" CITY_ID="12" CREATEDBY="DBUNIT" />
+  <PASSWORD ID="10" HASHED="harry" CREATEDBY="DBUNIT" />
+  <PASSWORD ID="11" HASHED="ron" CREATEDBY="DBUNIT" />
+  <PASSWORD ID="12" HASHED="hermione" CREATEDBY="DBUNIT" />
+  <USER_ ID="10" EMAIL="harry.potter@hogwarts.edu" FIRSTNAME="DBUNIT" LASTNAME="Potter" ADDRESS_ID="10" PASSWORD_ID="10" CREATEDBY="DBUNIT" />
+  <USER_ ID="11" EMAIL="ron.weasley@hogwarts.edu" FIRSTNAME="Ron TEST" LASTNAME="Weasley" ADDRESS_ID="11" PASSWORD_ID="11" CREATEDBY="DBUNIT" />
+  <USER_ ID="12" EMAIL="hermione.granger@hogwarts.edu" FIRSTNAME="Hermione TEST" LASTNAME="Granger" ADDRESS_ID="12" PASSWORD_ID="12" CREATEDBY="DBUNIT" />
+  <ARTIFACT ID="10" DTYPE="RE" DESCRIPTION="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." TITLE="Veau marengo" CREATEDBY="DBUNIT" />
+  <ARTIFACT ID="11" DTYPE="RE" DESCRIPTION="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." TITLE="Marbr&#233; au th&#233; matcha" CREATEDBY="DBUNIT" />
+  <ARTIFACT ID="12" DTYPE="RE" DESCRIPTION="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." TITLE="Lasagne aux deux saumons" CREATEDBY="DBUNIT" />
+<!--  <INGREDIENT ID="10" NAME="sel" CREATEDBY="DBUNIT" />
+  <INGREDIENT ID="11" NAME="tomate" CREATEDBY="DBUNIT" />
+  <INGREDIENT ID="12" NAME="beurre" CREATEDBY="DBUNIT" />-->
+</dataset>

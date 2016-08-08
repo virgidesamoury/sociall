@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <!-- INTERFACE -->
+    <cc:interface>
+        <cc:attribute name="artifact" type="be.isl.desamouryv.sociall.domain.Artifact"
+                      shortDescription="The artifact whose images must be displayed."
+                      required="true"/>
+    </cc:interface>
+
+    <!-- IMPLEMENTATION -->
+    <cc:implementation>
+        <h:panelGroup layout="block" styleClass="inlineblock gallery">
+            <h:outputText value="gallerie"/>
+            <p:galleria value="#{cc.attrs.artifact.images}" 
+                        var="image" 
+                        panelWidth="500" 
+                        panelHeight="313" 
+                        showCaption="false"
+                        autoPlay="false">  
+                <p:graphicImage value="/images/#{image.fileName}" 
+                                alt="#{image.alt}" 
+                                title="#{image.fileName}"
+                                width="500" 
+                                rendered="#{cc.attrs.artifact.images != null}"/>
+                <p:graphicImage library="images" name="noimage.jpg" 
+                                width="500"
+                                style="display:block;"
+                                rendered="#{cc.attrs.artifact.images.size() == 0}"/>
+            </p:galleria>
+        </h:panelGroup>
+    </cc:implementation>
+</html>

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://java.sun.com/jsf/passthrough"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:form id="headerForm">
+        <h:link outcome="/index"
+                value="#{msg['common.appname']}" styleClass="logo"/>
+<!--            <h:outputText styleClass="logo" value="#{msg['common.appname']}"/>
+        </h:link>-->
+
+        <p:inputText size="50" pt:placeholder="#{msg['common.search.example']}" 
+                     value="#{searchString}"/>
+        <p:commandButton icon="ui-icon-search"
+                         action="#{navigationController.list(searchString)}"/>
+                         <!--disabled="#{searchString == null}"/>-->
+
+        
+        <h:panelGroup rendered="#{!userSession.loggedIn}">
+            <p:button outcome="/pages/signin/login" value="#{msg['common.button.login']}"/>  
+            <p:button outcome="/pages/signin/signup" value="#{msg['common.button.signup']}"/>  
+        </h:panelGroup>
+
+        <h:panelGroup styleClass="profileMenu" rendered="#{userSession.loggedIn}">
+            <sc:profilePic user="#{userSession.user}" width="50" />
+            <p:menuButton value="#{userSession.user.firstName}" >  
+                <c:forEach items="#{appManager.menuItems}"
+                           var="item">
+                    <p:menuitem value="#{msg[item.title]}" 
+                                outcome="#{item.filePath}"
+                                rendered="#{userSession.isAllowed(item.rolesRestriction)}"/>            
+                </c:forEach>
+                <p:separator/>
+                <p:menuitem value="#{msg['menu.logout']}" 
+                            action="#{authController.logout()}" />  
+            </p:menuButton> 
+        </h:panelGroup>
+    </h:form>
+
+</html>
+

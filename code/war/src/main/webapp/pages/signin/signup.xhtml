@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="top">
+                <ui:include src="/WEB-INF/includes/header.xhtml"/>
+            </ui:define>
+
+            <ui:define name="content">
+
+                <h:panelGroup layout="block" rendered="#{not signupController.signed}"
+                              id="signupPanel">
+                    <p:panel header="#{msg['signup.title']}">
+                        <h:form>
+                            <h:panelGroup styleClass="loginSocial">
+                                <p:fieldset legend="#{msg['signup.google']}">
+                                    <p:commandLink id="google" 
+                                                   action="#{authController.signin('google')}">
+                                        <p:graphicImage library="images" name="plus_128.png"/>
+                                    </p:commandLink>
+                                </p:fieldset>
+                            </h:panelGroup>
+
+                            <h:panelGroup styleClass="loginSocial"> 
+                                <p:fieldset legend="#{msg['signup.facebook']}">
+                                    <p:commandLink id="facebook" 
+                                                   action="#{authController.signin('facebook')}">
+                                        <p:graphicImage library="images" name="facebook_128.png"/>
+                                    </p:commandLink>
+                                </p:fieldset>
+                            </h:panelGroup>
+
+                            <h:panelGroup styleClass="loginSocial"> 
+                                <p:fieldset legend="#{msg['signup.twitter']}">
+                                    <p:commandLink id="twitter" 
+                                                   action="#{authController.signin('twitter')}">
+                                        <p:graphicImage library="images" name="twitter_128.png"/>
+                                    </p:commandLink>
+                                </p:fieldset>
+                            </h:panelGroup>
+                        </h:form>
+
+
+                        <h:form>
+                            <p:fieldset  rendered="#{!signupController.signed}"
+                                         legend="#{msg['signup.classic']}"
+                                         toggleable="true"
+                                         collapsed="true"
+                                         styleClass="signupClassic">
+                                <p:outputLabel value="#{msg['common.firstname']}"
+                                               for="firstName"/>
+                                <p:inputText value="#{signupController.user.firstName}"
+                                             id="firstName"
+                                             required="true"/>
+                                <p:message for="firstName" display="icon"/>
+
+                                <p:outputLabel value="#{msg['common.lastname']}"
+                                               for="lastName"/>
+                                <p:inputText value="#{signupController.user.lastName}"
+                                             id="lastName"
+                                             required="true"
+                                             pt:type="lastName"/>
+                                <p:message for="lastName" display="icon"/>
+
+                                <p:outputLabel value="#{msg['common.email']}"
+                                               for="email"/>
+                                <p:inputText value="#{signupController.user.email}"
+                                             id="email"
+                                             required="true"
+                                             pt:type="email"/>
+                                <p:message for="email" display="icon"/>
+
+                                <p:outputLabel value="#{msg['common.password']}"
+                                               for="password"/>
+                                <p:password     value="#{signupController.user.password.hashed}"
+                                                id="password"
+                                                required="true"
+                                                feedback="true"
+                                                match="passwordRpt"
+                                                promptLabel="#{msg['common.password.prompt']}"
+                                                goodLabel="#{msg['common.password.good']}"
+                                                weakLabel="#{msg['common.password.weak']}"
+                                                strongLabel="#{msg['common.password.strong']}"/>
+                                <p:message for="password" display="icon"/>
+
+                                <p:outputLabel id="passwordRptLbl" value="#{msg['common.password.repeat']}"
+                                               for="passwordRpt"/>
+                                <p:password id="passwordRpt"
+                                            required="true"
+                                            value="#{signupController.rptPassword}"/>
+                                <p:message id="passwordRptMsg" for="passwordRpt" display="icon"/>
+
+                                <p:commandButton value="#{msg['signup.confirm']}"
+                                                 action="#{signupController.signup()}"
+                                                 process="@form"
+                                                 update=":signupPanel"/>
+
+                                <p:ajaxStatus style="width:30px;height:30px;display:inline;" 
+                                              id="ajaxStatusPanel">  
+                                    <f:facet name="start">  
+                                        <p:graphicImage library="images" name="loader.gif" 
+                                                        style="width: 30px;display: inline;"/>  
+                                    </f:facet>  
+
+                                    <f:facet name="complete">  
+                                        <h:outputText value="" />  
+                                    </f:facet>  
+                                </p:ajaxStatus> 
+                            </p:fieldset>
+                        </h:form>
+                    </p:panel>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" >
+                    <h:form>
+                        <h:panelGroup rendered="#{userSession.loggedIn}">
+                            <h:outputFormat value="#{msg['signup.wronguser']}">
+                                <f:param value="#{userSession.user.firstName}"/>
+                            </h:outputFormat>
+                            <h:commandLink value="#{msg['signup.logout']}"
+                                           action="#{authController.logout}"/>
+                        </h:panelGroup>
+                    </h:form>
+                </h:panelGroup>
+
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

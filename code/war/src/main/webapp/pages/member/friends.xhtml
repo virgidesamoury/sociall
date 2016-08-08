@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <ui:include src="/WEB-INF/includes/profilemenu.xhtml">
+                    <ui:param name="activeIndex" value="#{appManager.getMenuIndex('profile.menu.friends')}"/>
+                </ui:include>
+                <p:panel header="#{msg['profile.friends.title']}">
+
+                    <p:fieldset legend="#{msg['contact.received']}">
+                        <p:dataList value="#{contactController.receivedPending}"
+                                    var="invite">
+                            <sc:profilePic user="#{invite.sender}"/>
+                            <sc:profilePic user="#{invite.sender.firstName} #{invite.sender.lastName}"/>
+                            <p:button value="#{msg['contact.accept']}"/>
+                            <p:separator/>
+                        </p:dataList>
+                    </p:fieldset>
+                    
+                    <p:fieldset legend="#{msg['contact.sent']}">
+                        <p:dataList value="#{contactController.sentPending}"
+                                    var="invite">
+                            <sc:profilePic user="#{invite.invited}"/>
+                            <sc:profilePic user="#{invite.invited.firstName} #{invite.invited.lastName}"/>
+                            <p:separator/>
+                        </p:dataList>
+                    </p:fieldset>
+                    
+                    <p:fieldset legend="#{msg['contact.contacts']}">
+                        <p:dataGrid value="#{contactController.contacts}"
+                                    columns="4"
+                                    var="invite">
+                            <sc:profilePic user="#{contactController.otherUser(invite)}"/>
+                        </p:dataGrid>
+                    </p:fieldset>
+
+
+
+
+                </p:panel>
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

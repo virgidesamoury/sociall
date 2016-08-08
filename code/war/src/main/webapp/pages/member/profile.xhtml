@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:sc="http://xmlns.jcp.org/jsf/composite/components">
+
+    <body>
+
+        <ui:composition template="/WEB-INF/templates/template.xhtml">
+
+            <ui:define name="content">
+                <ui:include src="/WEB-INF/includes/profilemenu.xhtml">
+                    <ui:param name="activeIndex" value="#{appManager.getMenuIndex('profile.menu.profile')}"/>
+                </ui:include>
+                <p:panel header="#{msg['profile.infos.title']}" styleClass="profilePanel">
+                    <h:form enctype="multipart/form-data">
+                        <p:messages/>
+                        <p:fieldset legend="#{msg['profile.picture.title']}">
+                            <sc:profilePic user="#{userSession.user}" 
+                                           width="150"/>
+                            <h:outputText value="#{msg['profile.picture.change']}"/>:
+                            <p:fileUpload id="fileUpload"
+                                          fileUploadListener="#{userController.uploadProfilePic}" 
+                                          dragDropSupport="true"
+                                          fileLimit="1" 
+                                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                                          sizeLimit="2000000"
+                                          invalidFileMessage="#{msg['profile.picture.error.filetype']}"
+                                          invalidSizeMessage="#{msg['profile.picture.error.filesize']}"
+                                          label="#{msg['common.upload.choose']}"
+                                          uploadLabel="#{msg['common.upload.upload']}"
+                                          cancelLabel="#{msg['common.upload.cancel']}"
+                                          process="@form" 
+                                          update="@form :headerForm"/>
+                            <p:messages/>
+                        </p:fieldset>
+                    </h:form>
+
+                    <h:form>
+                        <p:fieldset legend="#{msg['profile.data']}">
+                            <p:panelGrid columns="2" id="memberDetail">
+                                <h:outputLabel value="#{msg['common.username']}"/>
+                                <p:inplace editor="true" emptyLabel="...">
+                                    <p:inputText value="#{userSession.user.userName}"/>
+                                    <p:ajax event="save" 
+                                            listener="#{userController.edit()}"
+                                            process="@this"
+                                            update="memberDetail"/>
+                                </p:inplace>
+                                <h:outputLabel value="#{msg['common.firstname']}"/>
+                                <p:inplace editor="true" emptyLabel="...">
+                                    <p:inputText value="#{userSession.user.firstName}"/>
+                                    <p:ajax event="save" 
+                                            listener="#{userController.edit()}"
+                                            process="@this"
+                                            update="memberDetail"/>
+                                </p:inplace>
+                                <h:outputLabel value="#{msg['common.lastname']}"/>
+                                <p:inplace editor="true" emptyLabel="...">
+                                    <p:inputText value="#{userSession.user.lastName}"/>
+                                    <p:ajax event="save" 
+                                            listener="#{userController.edit()}"
+                                            process="@this"
+                                            update="memberDetail"/>
+                                </p:inplace>
+                                <h:outputLabel value="#{msg['common.email']}"/>
+                                <p:inplace editor="true" emptyLabel="...">
+                                    <p:inputText value="#{userSession.user.email}"/>
+                                    <p:ajax event="save" 
+                                            listener="#{userController.edit()}"
+                                            process="@this"
+                                            update="memberDetail"/>
+                                </p:inplace>
+                            </p:panelGrid>
+                        </p:fieldset>
+                    </h:form>
+                </p:panel>
+
+                <p:panel header="#{msg['profile.password']}">
+                    <h:form>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="#{msg['profile.password.current']}" for="oldPwd"/>
+                            <h:panelGroup layout="block" style="display:inline-block;">
+                                <p:password value="#{userController.oldPassword}" required="true"
+                                            id="oldPwd"
+                                            validatorMessage="#{msg['validator.password.old']}">
+                                    <f:validator validatorId="passwordValidator" />
+                                </p:password>
+                                <p:message for="oldPwd" />
+                            </h:panelGroup>
+                            <p:outputLabel value="#{msg['profile.password.new']}" for="newPwd"/>
+                            <h:panelGroup>
+                                <p:password value="#{userController.newPassword}" required="true"
+                                            id="newPwd"
+                                            validatorMessage="#{msg['validator.password.different']}.">
+                                    <f:validator validatorId="newPasswordValidator" />
+                                    <f:attribute name="repeatPassword" value="#{repeatPassword}" />
+                                </p:password>
+                                <p:message for="newPwd"/>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="#{msg['profile.password.repeat']}" for="rptPwd"/>
+                            <h:panelGroup>
+                                <p:password binding="#{repeatPassword}" required="true"
+                                            id="rptPwd"/>
+                                <p:message for="rptPwd"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup/>
+                            <p:commandButton value="#{msg['common.save']}" 
+                                             action="#{userCtrl.changePassword()}"
+                                             process="@form"
+                                             update="@form"
+                                             />
+                        </p:panelGrid>
+                    </h:form>
+                </p:panel>
+            </ui:define>
+
+            <ui:define name="bottom">
+                bottom
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

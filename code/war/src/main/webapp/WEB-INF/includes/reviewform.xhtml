@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <p:panel header="#{msg['review.create']}" >
+        <h:panelGroup layout="block" rendered="#{not userSession.loggedIn}">
+            <p>
+                <h:outputText value="#{msg['review.leaveareview']}"/>&nbsp;
+                <h:link value="#{msg['review.signup']}" outcome="/pages/signin/signup"/>
+            </p>
+            <p>
+                <h:outputText value="#{msg['review.alreadymember']}"/>&nbsp;
+                <h:link value="#{msg['review.login']}" outcome="/pages/signin/login"/>
+            </p>
+        </h:panelGroup>
+
+        <h:form>
+            <h:panelGroup layout="block" rendered="#{userSession.loggedIn and !reviewController.saved}">
+                <p>
+                    <p:outputLabel for="revTitle" value="#{msg['review.title']}"/>
+                    <h:inputText id="revTitle"
+                                 value="#{reviewController.review.title}"
+                                 style="width: 100%;"
+                                 required="true"/>
+                    <p:message for="revTitle" display="icon"/>
+                </p>
+
+                <p>
+                    <p:outputLabel for="revRating" value="#{msg['review.rating']}"/>
+                    <p:rating id="revRating"
+                              value="#{reviewController.rating}"
+                              required="true"/>
+                    <p:message for="revRating" display="icon"/>
+                </p>
+
+                <p:outputLabel for="revText" value="#{msg['review.text']}"/>
+                <p:editor id="revText"
+                          value="#{reviewController.review.text}"
+                          controls="bold italic underline strikethrough undo redo"
+                          required="true"/>
+                <p:message for="revText" display="icon"/>
+
+                <p:commandButton 
+                    value="#{msg['review.save']}"
+                    action="#{reviewController.createReview(artifact)}"
+                    process="@form"
+                    update="@form"
+                    />
+            </h:panelGroup>
+            <p:messages/>
+        </h:form>
+    </p:panel>
+
+</html>
+
